@@ -10,6 +10,37 @@
             <div class="user-profile__follower-count">
                 <strong>Followers: {{ followers }}</strong>
             </div>
+            <form class="user-profile__create-twoot" @submit.prevent="createNewTwoot">
+                <label for="newTwoot"><strong>New Twoot</strong></label>
+                <textarea 
+                    id="newTwoot" 
+                    name="newTwoot" 
+                    cols="30" 
+                    rows="4"
+                    v-model="newTwootContent"
+                />
+
+                <div class="user-profile__create-twoot-type">
+                    <label for="newTwootType"><strong>Type: </strong></label>
+                    <select 
+                        name="newTwootType" 
+                        id="newTwootType"
+                        v-model="selectedTwootType"
+                    >
+                        <option 
+                            :value="option.value" 
+                            v-for="(option, index) in twootTypes"
+                            :key="index"
+                        >
+                            {{ option.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit">
+                    Twoot it!
+                </button>
+            </form>
         </div>
         <div class="user-profile__twoots-wrapper">
             <TwootItem 
@@ -32,19 +63,25 @@ export default {
     },
     data() {
         return {
-        followers: 0,
-        user: {
-                id: 1,
-                username: 'FrainRisen',
-                firstName: 'Andrew',
-                lastName: 'Kovalenko',
-                email: 'an.kava@gmail.com',
-                isAdmin: true,
-                twoots: [
-                    {id: 1, content: 'Twotter is Amazing!'},
-                    {id: 2, content: "Don't forget to subscribe to @FrainRisen"},
-                    {id: 3, content: 'All lives matter!'},
-                ]
+            newTwootContent: '',
+            selectedTwootType: 'instant',
+            twootTypes: [
+                {value: 'draft', name: 'Draft'},
+                {value: 'instant', name: 'Instant twoot'}
+            ],
+            followers: 0,
+            user: {
+                    id: 1,
+                    username: 'FrainRisen',
+                    firstName: 'Andrew',
+                    lastName: 'Kovalenko',
+                    email: 'an.kava@gmail.com',
+                    isAdmin: true,
+                    twoots: [
+                        {id: 1, content: 'Twotter is Amazing!'},
+                        {id: 2, content: "Don't forget to subscribe to @FrainRisen"},
+                        {id: 3, content: 'All lives matter!'},
+                    ]
             }
         }
     },
@@ -66,6 +103,16 @@ export default {
         },
         toggleFavourite(id) {
             console.log(`Favourited tweet #${id}`)
+        },
+        createNewTwoot() {
+            if(this.newTwootContent && this.selectedTwootType !== 'draft'){
+                this.user.twoots.unshift({
+                    id: this.user.twoots.length + 1,
+                    content: this.newTwootContent
+                })
+            }
+
+            this.newTwootContent = ''
         } 
     },
     mounted() {
@@ -100,6 +147,13 @@ export default {
     margin-right: auto;
     padding: 0 10px;
     font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.user-profile__create-twoot {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
 }
 
 h1{
