@@ -1,26 +1,27 @@
 <template>
   <div class="app">
     <nav>
-      <div class="navigation__logo">
-        Twooter
-      </div>
-      <div class="navigation__user">
-        {{ state.user.username }}
-      </div>
+      <router-link to="/">
+        <div class="navigation__logo link">
+          Twooter
+        </div>
+      </router-link>
+      <router-link to="/user/:userId">
+        <div class="navigation__user link">
+          {{ state.user.username }}
+        </div>
+      </router-link>
     </nav>
-    <UserProfile />
+    <router-view />
   </div>
 </template>
 
 <script>
 import { reactive } from 'vue'
-import UserProfile from './components/UserProfile'
+
 
 export default {
   name: 'App',
-  components: {
-    UserProfile
-  },
   setup() {
     const state = reactive({
       user: {
@@ -49,7 +50,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 10px 5%;
-    background-color: deeppink;
+    background-color: rebeccapurple;
     color: white;
     
     .navigation__logo {
@@ -59,6 +60,11 @@ export default {
     
     .navigation__user {
       font-weight: bold;
+    }
+
+    .link:hover {
+      transition: color .3s ease;
+      color: rgb(58, 164, 226);
     }
   }
 }

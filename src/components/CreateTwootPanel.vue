@@ -102,7 +102,7 @@ export default {
         margin: auto 0;
         border-radius: 5px;
         border: none;
-        background-color: deeppink;
+        background-color: rebeccapurple;
         color: white;
         font-weight: bold;
         }
