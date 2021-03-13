@@ -1,7 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home'
-import UserProfile from '../views/UserProfile'
-import Admin from '../views/Admin'
+import { createRouter, createWebHistory } from 'vue-router';
+import store from '../store';
+import { users } from "../assets/users";
+import Home from '../views/Home.vue'
+import UserProfile from "../views/UserProfile";
+import Admin from "../views/Admin";
 
 const routes = [
   {
@@ -30,14 +32,17 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const isAdmin = true
-  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
+  const user = store.state.User.user;
 
-  if(requiresAdmin && !isAdmin) {
-    next({ name: 'Home' })
-  } else {
-    next()
+  if (!user) {
+    await store.dispatch('User/setUser', users[0]);
   }
+
+  const isAdmin = false;
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+
+  if (requiresAdmin && !isAdmin) next({ name: 'Home' });
+  else next();
 })
 
 export default router
